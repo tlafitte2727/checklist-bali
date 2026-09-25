@@ -1,0 +1,349 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0b7a68">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Checklist Bali">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icons/icon-180.png">
+<title>Checklist Bali</title>
+<style>
+:root{
+  --bg:#f4f7f6; --card:#fff; --text:#17212b; --muted:#697783; --line:#e4ebe8;
+  --green:#0b7a68; --green2:#0d5f53; --soft:#ddf5ef; --red:#b42318; --orange:#a15c00;
+  --blue:#245ea8; --purple:#6e44a5;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{background:var(--bg)}
+body{
+  margin:0;background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text",Inter,system-ui,Segoe UI,Roboto,Arial,sans-serif;
+  color:var(--text);padding-top:env(safe-area-inset-top);padding-bottom:env(safe-area-inset-bottom)
+}
+.wrap{max-width:1020px;margin:auto;padding:18px 14px 46px}
+.hero{
+  padding:24px 20px;border-radius:24px;background:linear-gradient(135deg,var(--green),var(--green2));
+  color:white;box-shadow:0 12px 35px rgba(11,122,104,.17)
+}
+h1{margin:0 0 8px;font-size:clamp(28px,7vw,42px);letter-spacing:-.5px}
+.hero p{margin:5px 0;opacity:.94;line-height:1.35}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}
+.chip{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.24);padding:7px 10px;border-radius:999px;font-size:13px}
+.barShell{height:14px;background:rgba(255,255,255,.22);border-radius:999px;overflow:hidden;margin-top:20px}
+.bar{height:100%;background:#fff;width:0;transition:.25s}
+.stat{margin-top:9px;font-size:14px}
+.summary{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:14px 0}
+.summary .box{background:white;border:1px solid var(--line);border-radius:16px;padding:14px}
+.summary .big{font-size:21px;font-weight:800}
+.summary .small{font-size:12px;color:var(--muted);margin-top:4px}
+.toolbar{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
+button{
+  background:white;border:1px solid var(--line);border-radius:12px;padding:10px 13px;font-weight:650;cursor:pointer;
+  font-family:inherit;font-size:14px
+}
+section{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px;margin:12px 0}
+h2{font-size:19px;margin:0 0 8px}
+.desc{font-size:13px;color:var(--muted);margin:0 0 8px;line-height:1.45}
+.task{
+  display:grid;grid-template-columns:32px 1fr auto;gap:8px;align-items:start;padding:11px 4px;border-top:1px solid #f0f3f2
+}
+.task:first-of-type{border-top:none}
+input[type=checkbox]{width:22px;height:22px;margin-top:1px;accent-color:var(--green);cursor:pointer}
+label{cursor:pointer;line-height:1.4;font-size:15px}
+.task.completed label{text-decoration:line-through;color:#87939c}
+.badge{font-size:11px;padding:4px 8px;border-radius:999px;white-space:nowrap;font-weight:700}
+.red{background:#fee4e2;color:var(--red)} .orange{background:#fff0d5;color:var(--orange)}
+.blue{background:#e6effc;color:var(--blue)} .green{background:#daf5e9;color:#16704d}
+.purple{background:#eee7f8;color:var(--purple)}
+.callout{background:#f8fbfa;border-left:4px solid var(--green);padding:12px 14px;border-radius:10px;margin:10px 0;font-size:13px;line-height:1.5}
+textarea{
+  width:100%;min-height:110px;padding:12px;border:1px solid var(--line);border-radius:12px;font:inherit;resize:vertical;background:#fff
+}
+footer{text-align:center;color:var(--muted);font-size:12px;margin-top:18px}
+.install{
+  position:sticky;bottom:10px;z-index:10;margin-top:12px;background:#17212b;color:white;border-radius:14px;padding:12px 14px;
+  box-shadow:0 10px 30px rgba(0,0,0,.2);font-size:13px;line-height:1.35
+}
+.install strong{display:block;margin-bottom:2px}
+@media(max-width:700px){
+  .summary{grid-template-columns:1fr 1fr}
+  .summary .box:last-child{grid-column:1/-1}
+  .task{grid-template-columns:32px 1fr}
+  .badge{grid-column:2;justify-self:start}
+}
+@media(display-mode:standalone){.install{display:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="hero">
+    <h1>🌴 Checklist Bali</h1>
+    <p><strong>Départ :</strong> 26 octobre 2026 · <strong>Durée initiale :</strong> ~4,5 mois</p>
+    <p><strong>Travail :</strong> Yacht Sourcing — Jl. Dermaga I, Pedungan, Denpasar Selatan</p>
+    <div class="chips">
+      <span class="chip">🛵 Scooter prévu</span>
+      <span class="chip">🏠 + 🛵 ~5 000 000 IDR/mois</span>
+      <span class="chip">🔁 Séjour prolongeable</span>
+    </div>
+    <div class="barShell"><div id="bar" class="bar"></div></div>
+    <div class="stat" id="stat">0 tâche terminée</div>
+  </div>
+
+  <div class="summary">
+    <div class="box"><div class="big">26 oct.</div><div class="small">Départ</div></div>
+    <div class="box"><div class="big">4,5 mois</div><div class="small">Séjour initial</div></div>
+    <div class="box"><div class="big">5 M IDR</div><div class="small">Aide logement + scooter</div></div>
+  </div>
+
+  <div class="toolbar">
+    <button onclick="showOnlyPriority()">Priorités</button>
+    <button onclick="showAll()">Tout afficher</button>
+    <button onclick="resetDefaults()">Réinitialiser</button>
+  </div>
+
+  <div id="content"></div>
+
+  <section>
+    <h2>📝 Mes notes</h2>
+    <p class="desc">Contacts, logements repérés, prix scooter, visa, assurance…</p>
+    <textarea id="notes" placeholder="Écris tes notes ici…"></textarea>
+  </section>
+
+  <div class="install" id="installTip">
+    <strong>📱 Installer sur iPhone</strong>
+    Dans Safari : Partager → Ajouter à l’écran d’accueil → Ajouter.
+  </div>
+
+  <footer>Les cases et notes sont sauvegardées automatiquement sur cet iPhone.</footer>
+</div>
+
+<script>
+const groups = [
+{
+ title:"✅ Déjà fait / lancé",
+ desc:"Ta base de départ.",
+ items:[
+  ["Billet d’avion acheté pour le 26 octobre 2026","green",true],
+  ["Carte bancaire internationale obtenue","green",true],
+  ["Visa lancé / dossier en cours","green",true]
+ ]
+},
+{
+ title:"🚨 À confirmer avec Yacht Sourcing en priorité",
+ desc:"Comme tu vas travailler physiquement en Indonésie, cette partie est plus importante qu’un simple visa de séjour.",
+ items:[
+  ["Demander par écrit le type exact de visa / titre de séjour qui est en cours pour toi","red",false],
+  ["Faire confirmer par l’entreprise que ce statut autorise bien ton activité professionnelle sur place","red",false],
+  ["Demander qui est le sponsor / garant officiel de ton dossier et qui gère les formalités liées au travail","red",false],
+  ["Demander qui paie les renouvellements / extensions de visa si tu restes plus de 4,5 mois","orange",false],
+  ["Demander quels frais administratifs restent à ta charge","orange",false],
+  ["Faire confirmer les dates de début et de fin autorisées par ton visa / titre de séjour","red",false],
+  ["Demander si l’entreprise fournit une assurance santé / accident ou si tu dois tout prendre toi-même","red",false],
+  ["Faire confirmer par écrit l’aide de 5 000 000 IDR/mois et ce qu’elle couvre exactement","orange",false],
+  ["Demander si l’aide logement/scooter est remboursée sur justificatifs ou versée forfaitairement","orange",false],
+  ["Demander s’ils ont des recommandations de logements proches du bureau et de loueurs de scooters fiables","blue",false]
+ ]
+},
+{
+ title:"🏠 Logement — stratégie adaptée à ton bureau",
+ desc:"Pour les premières semaines, privilégie un trajet court vers Pedungan. Ne signe pas plusieurs mois à distance sans visite.",
+ items:[
+  ["Réserver 7 à 10 nuits de logement temporaire autour de Denpasar Selatan / Sanur sud","red",false],
+  ["Repérer en priorité des logements à Pedungan, Sesetan et alentours immédiats","red",false],
+  ["Comparer aussi Sanur Kauh / sud de Sanur si tu veux un cadre plus agréable et acceptes de payer plus","blue",false],
+  ["Éviter au départ un logement à Canggu / Uluwatu / Ubud si tu dois aller quotidiennement au bureau","orange",false],
+  ["Fixer ton budget logement personnel maximum au-delà de l’aide entreprise","orange",false],
+  ["Visiter chaque logement physiquement avant engagement longue durée","red",false],
+  ["Tester le trajet logement → Yacht Sourcing aux heures de pointe avant de signer","red",false],
+  ["Vérifier bruit, humidité/moisissures, climatisation, eau chaude, pression d’eau et sécurité","blue",false],
+  ["Tester le Wi-Fi et la couverture mobile dans le logement","blue",false],
+  ["Demander si électricité, eau, Wi-Fi, ménage et entretien sont compris","blue",false],
+  ["Privilégier un bail mensuel ou avec sortie flexible au début","orange",false],
+  ["Photographier l’état du logement à l’entrée et conserver contrat + reçus","blue",false]
+ ]
+},
+{
+ title:"💰 Budget logement + scooter",
+ desc:"Les 5 M IDR sont une contribution de départ. Tu peux compléter pour améliorer ton confort.",
+ items:[
+  ["Demander le montant net exact disponible chaque mois pour logement + scooter","red",false],
+  ["Obtenir 3 devis de location scooter mensuelle avant de choisir","orange",false],
+  ["Obtenir 5 à 10 exemples de logements dans ton rayon de trajet","orange",false],
+  ["Décider combien tu acceptes d’ajouter personnellement par mois au-delà des 5 M IDR","red",false],
+  ["Créer un budget mensuel complet : logement, scooter, essence, nourriture, téléphone, assurance, loisirs","blue",false],
+  ["Prévoir une réserve pour caution + premier mois + dépenses d’installation","red",false],
+  ["Prévoir un fonds d’urgence séparé","red",false]
+ ]
+},
+{
+ title:"🛵 Scooter & conduite",
+ desc:"Tu vas probablement l’utiliser tous les jours : légalité, assurance et sécurité passent avant le prix.",
+ items:[
+  ["Vérifier que ton permis français couvre bien la catégorie de deux-roues que tu comptes conduire","red",false],
+  ["Obtenir le permis international approprié avant de partir si requis","red",false],
+  ["Vérifier noir sur blanc les conditions scooter de ton assurance santé / voyage","red",false],
+  ["Demander au loueur les papiers du scooter et vérifier qu’ils sont à jour","red",false],
+  ["Choisir un casque intégral ou de bonne qualité, bien ajusté","red",false],
+  ["Contrôler pneus, freins, feux, klaxon et état général avant de louer","orange",false],
+  ["Prendre des photos/vidéos du scooter au moment de la remise","orange",false],
+  ["Demander les conditions en cas de vol, accident ou panne","orange",false],
+  ["Éviter de laisser ton passeport original en caution","red",false],
+  ["Tester quelques jours le trajet bureau avant de choisir un logement définitif","blue",false],
+  ["Prévoir veste de pluie / poncho et protection étanche pour téléphone","blue",false]
+ ]
+},
+{
+ title:"🩺 Santé & assurance",
+ desc:"Pour 4,5 mois, prends une couverture qui ne se limite pas à une courte assurance vacances.",
+ items:[
+  ["Choisir une assurance santé internationale couvrant au minimum toute la durée initiale","red",false],
+  ["Vérifier hospitalisation, urgence, rapatriement et responsabilité civile","red",false],
+  ["Vérifier les exclusions liées au scooter et les exigences de permis / casque","red",false],
+  ["Prévoir la possibilité de prolonger l’assurance si ton séjour est prolongé","orange",false],
+  ["Faire le point vaccins / médecine des voyages avant le départ","orange",false],
+  ["Préparer traitements personnels + ordonnances","orange",false],
+  ["Constituer une petite trousse médicale","blue",false],
+  ["Enregistrer les coordonnées d’une clinique / hôpital proche de ton secteur","blue",false]
+ ]
+},
+{
+ title:"📱 Téléphone, banque & documents",
+ desc:"À régler avant de partir pour ne pas dépendre de ton numéro français ou d’une seule carte.",
+ items:[
+  ["Vérifier que ton téléphone est désimlocké","orange",false],
+  ["Prévoir une SIM/eSIM utilisable dès l’arrivée","orange",false],
+  ["Installer Gojek, Grab, WhatsApp et Google Maps","blue",false],
+  ["Conserver ton numéro français pour les services qui l’utilisent encore","blue",false],
+  ["Mettre en place une alternative aux SMS pour la double authentification quand possible","red",false],
+  ["Prévoir une deuxième carte bancaire d’un autre établissement","red",false],
+  ["Vérifier plafonds de paiement/retrait et frais internationaux","orange",false],
+  ["Scanner passeport, visa, permis, assurance, billet et contrat de travail","red",false],
+  ["Stocker une copie dans le cloud + une copie hors connexion","red",false]
+ ]
+},
+{
+ title:"🇫🇷 Avant de quitter la France",
+ desc:"Ton séjour initial est temporaire, mais assez long pour justifier un peu d’organisation.",
+ items:[
+  ["Vérifier la situation Sécurité sociale / mutuelle pendant 4,5 mois à l’étranger","red",false],
+  ["Vérifier les implications fiscales de ton activité professionnelle en Indonésie","red",false],
+  ["Prévoir une adresse fiable pour le courrier en France","orange",false],
+  ["Passer les documents importants en dématérialisé","blue",false],
+  ["Suspendre / résilier les abonnements inutiles","blue",false],
+  ["Prévoir une personne de confiance en France pour les urgences administratives","blue",false]
+ ]
+},
+{
+ title:"✈️ Dernière semaine avant le 26 octobre",
+ desc:"Tout ce qui doit être finalisé juste avant le vol.",
+ items:[
+  ["Vérifier que le visa final est bien délivré et conforme","red",false],
+  ["Vérifier les formalités d’entrée et déclarations officielles à jour","red",false],
+  ["Sauvegarder tous les QR codes / confirmations hors connexion","red",false],
+  ["Confirmer le premier hébergement","red",false],
+  ["Confirmer le transfert depuis l’aéroport","orange",false],
+  ["Préparer médicaments et documents importants en cabine","red",false],
+  ["Vérifier franchise bagages et objets interdits de la compagnie aérienne","orange",false],
+  ["Prévenir Yacht Sourcing de ton heure / jour d’arrivée","blue",false],
+  ["Avoir le contact d’une personne de l’entreprise disponible à ton arrivée","blue",false]
+ ]
+},
+{
+ title:"🌴 Première semaine à Bali",
+ desc:"Ne te précipite pas sur un bail ou un scooter longue durée le premier jour.",
+ items:[
+  ["Activer ta SIM/eSIM locale","blue",false],
+  ["Faire le trajet jusqu’à Yacht Sourcing plusieurs fois aux horaires de travail","red",false],
+  ["Tester Pedungan / Sesetan pour la praticité quotidienne","blue",false],
+  ["Tester Sanur / Sanur Kauh si tu privilégies davantage le cadre de vie","blue",false],
+  ["Visiter plusieurs logements avant de décider","red",false],
+  ["Comparer plusieurs scooters et contrats de location","red",false],
+  ["Repérer supermarché, pharmacie, clinique, station-service et laverie","blue",false],
+  ["Mettre dans ton calendrier toutes les échéances de visa / titre de séjour","red",false]
+ ]
+},
+{
+ title:"🔁 Si tu décides de rester plus longtemps",
+ desc:"À garder visible sans lancer ces démarches tout de suite.",
+ items:[
+  ["Décider environ 6 à 8 semaines avant la fin du séjour initial si tu souhaites prolonger","purple",false],
+  ["Demander à Yacht Sourcing la procédure exacte de renouvellement suffisamment en avance","purple",false],
+  ["Vérifier les délais, coûts, présence physique requise et documents nécessaires","purple",false],
+  ["Prolonger l’assurance santé avant son expiration","purple",false],
+  ["Renégocier le logement si tu veux rester plus longtemps","purple",false],
+  ["Faire un point fiscal / administratif si le séjour devient réellement long terme","purple",false]
+ ]
+}
+];
+
+const key="checklist_bali_app_v1";
+const noteKey="checklist_bali_notes_v1";
+let n=0;
+
+function build(filterPriority=false){
+ const state=JSON.parse(localStorage.getItem(key)||"{}");
+ const root=document.getElementById("content");
+ root.innerHTML=""; n=0;
+ groups.forEach(g=>{
+   const visibleItems = g.items.filter(([text,cl,def]) => !filterPriority || cl==="red" || def);
+   if(!visibleItems.length) { n += g.items.length; return; }
+   const sec=document.createElement("section");
+   const h=document.createElement("h2"); h.textContent=g.title; sec.appendChild(h);
+   const p=document.createElement("p"); p.className="desc"; p.textContent=g.desc; sec.appendChild(p);
+   g.items.forEach(([text,cl,def])=>{
+     const id="t"+(n++);
+     if(filterPriority && cl!=="red" && !def) return;
+     const row=document.createElement("div"); row.className="task";
+     const cb=document.createElement("input"); cb.type="checkbox"; cb.id=id;
+     cb.checked=Object.prototype.hasOwnProperty.call(state,id)?state[id]:def;
+     const lab=document.createElement("label"); lab.htmlFor=id; lab.textContent=text;
+     const b=document.createElement("span"); b.className="badge "+cl;
+     b.textContent=cl==="red"?"Priorité":cl==="orange"?"Avant départ":cl==="green"?"Déjà fait":cl==="purple"?"Si prolongation":"À organiser";
+     row.append(cb,lab,b); sec.appendChild(row);
+     cb.addEventListener("change",()=>{save();update()});
+   });
+   root.appendChild(sec);
+ });
+ update();
+}
+function save(){
+ const s=JSON.parse(localStorage.getItem(key)||"{}");
+ document.querySelectorAll('input[type="checkbox"]').forEach(x=>s[x.id]=x.checked);
+ localStorage.setItem(key,JSON.stringify(s));
+}
+function update(){
+ const state=JSON.parse(localStorage.getItem(key)||"{}");
+ const total=groups.reduce((acc,g)=>acc+g.items.length,0);
+ let done=0, idx=0;
+ groups.forEach(g=>g.items.forEach(([t,c,d])=>{
+   const id="t"+idx++;
+   const checked=Object.prototype.hasOwnProperty.call(state,id)?state[id]:d;
+   if(checked) done++;
+ }));
+ const pct=Math.round(done/total*100);
+ document.getElementById("bar").style.width=pct+"%";
+ document.getElementById("stat").textContent=done+" / "+total+" tâches terminées · "+pct+"%";
+ document.querySelectorAll('input[type="checkbox"]').forEach(x=>x.closest(".task").classList.toggle("completed",x.checked));
+}
+function resetDefaults(){
+ if(confirm("Réinitialiser toutes les cases et les notes ?")){
+   localStorage.removeItem(key);localStorage.removeItem(noteKey);notes.value="";build(false)
+ }
+}
+function showOnlyPriority(){save();build(true)}
+function showAll(){save();build(false)}
+
+const notes=document.getElementById("notes");
+notes.value=localStorage.getItem(noteKey)||"";
+notes.addEventListener("input",()=>localStorage.setItem(noteKey,notes.value));
+
+build(false);
+
+if("serviceWorker" in navigator){
+  window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js"));
+}
+</script>
+</body>
+</html>
